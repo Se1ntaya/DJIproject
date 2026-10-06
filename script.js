@@ -1,4 +1,8 @@
-const prosuctList = document.querySelector(".products__list");
+const productList = document.querySelector(".products__list");
+const btnPrev = document.querySelector(".pages__prev");
+const btnNext = document.querySelector(".pages__next");
+const pages = document.querySelector(".products__pages");
+const pagesList = document.querySelector(".pages__list");
 
 
 const drones = [
@@ -32,18 +36,107 @@ const drones = [
         name: "DJI Mini 2",
         cost: "490$"
     },
+    {
+        img: "quadcopter0003-front-view.jpg",
+        name: "DJI Mini 2",
+        cost: "490$"
+    },
+    {
+        img: "quadcopter0003-front-view.jpg",
+        name: "DJI Mini 2",
+        cost: "490$"
+    },
+    {
+        img: "quadcopter0003-front-view.jpg",
+        name: "DJI Mini 2",
+        cost: "490$"
+    },
+    {
+        img: "quadcopter0003-front-view.jpg",
+        name: "DJI Mini 2",
+        cost: "490$"
+    },
+    {
+        img: "quadcopter0003-front-view.jpg",
+        name: "DJI Mini 2",
+        cost: "490$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
+    {
+        img: "quadcopter0002-front-view.jpg",
+        name: "DJI AIR 2S",
+        cost: "1290$"
+    },
 ];
 
+let maxPages = Math.ceil(drones.length / 8);
+let curPage = 1;
+let itemsPerPage = 8;
+
 console.log(drones);
+console.log(maxPages);
 
 window.addEventListener("load", () => {
     console.log("loaded");
-    drones.forEach((elem) => {
-        prosuctList.appendChild(showDrones(elem["img"], elem["name"], elem["cost"]));
-    })
+    showDrones();
+    pagesSetup();
 })
 
-function showDrones(indImg, indName, indCost){
+function createProducts(indImg, indName, indCost){
     const liDrone = document.createElement("li");
     const aDrone = document.createElement("a");
     aDrone.href = "#";
@@ -77,4 +170,82 @@ function showDrones(indImg, indName, indCost){
     return liDrone;
 }
 
+function pagesSetup(){
+    if(maxPages <= 1) {
+        pages.classList.add("hidden");
+    }
+    else{
+        pages.classList.remove("hidden");
+    }
+    countPages(maxPages);
+}
+
+function countPages(max){
+    for(let i = 1; i <= max; i++){
+        const pagesLi = document.createElement("li");
+        pagesLi.classList.add("pages__item");
+        const pagesDiv = document.createElement("div");
+        pagesLi.appendChild(pagesDiv);
+        pagesDiv.classList.add("page__wrap");
+        pagesDiv.textContent = i;
+        pagesDiv.id = i;
+        if(+pagesDiv.id === 1){
+            pagesDiv.classList.add("active");
+        }
+        pagesList.appendChild(pagesLi);
+    }
+
+}
+
+function scrollPages(curPage){
+    const allPages = document.querySelectorAll(".page__wrap");
+    allPages.forEach((elem) => {
+        if (elem.id == curPage) {
+            elem.classList.add("active");
+        }
+        else {
+            elem.classList.remove("active");
+        }
+    })
+}
+
+btnNext.addEventListener("click", () => {
+    curPage++;
+    if(curPage === maxPages + 1){
+        curPage = 1;
+    }
+    scrollPages(curPage);
+    console.log(curPage);
+    showDrones();
+})
+
+btnPrev.addEventListener("click", () => {
+    curPage--;
+    if(curPage < 1){
+        curPage = maxPages;
+    }
+    scrollPages(curPage);
+    console.log(curPage);
+    showDrones();
+})
+
+
+pages.addEventListener("click", (event) => {
+    if(event.target.closest(".page__wrap")){
+        scrollPages(event.target.id);
+        curPage = event.target.id;
+        showDrones();
+    }
+})
+
+
+function showDrones() {
+    productList.replaceChildren();
+    let start = (curPage - 1) * itemsPerPage;
+    let end = start + itemsPerPage;
+    const selectedProd = drones.slice(start, end);
+    selectedProd.forEach((elem) => {
+        productList.appendChild(createProducts(elem["img"], elem["name"], elem["cost"]));
+    })
+}
 
