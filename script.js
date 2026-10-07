@@ -3,6 +3,9 @@ const btnPrev = document.querySelector(".pages__prev");
 const btnNext = document.querySelector(".pages__next");
 const pages = document.querySelector(".products__pages");
 const pagesList = document.querySelector(".pages__list");
+const cartWindow = document.querySelector(".products__cart");
+const overlay = document.querySelector(".window__overlay");
+const btnCartClose = document.querySelector(".products__close");
 
 
 const drones = [
@@ -249,3 +252,23 @@ function showDrones() {
     })
 }
 
+
+document.querySelector("body").addEventListener("click", (event) => {
+    if(event.target.closest(".cart__logo")){
+        cartWindow.classList.add("open");
+        overlay.classList.add("open");
+    }
+    else if(event.target.closest(".window__overlay")){
+        cartClose()
+    }
+})
+
+btnCartClose.addEventListener("click", () => {
+    cartClose();
+})
+
+
+function cartClose(){
+    cartWindow.classList.remove("open");
+    overlay.classList.remove("open");
+}
